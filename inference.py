@@ -2,8 +2,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from langchain_google_genai import ChatGoogleGenerativeAI
-from model import get_hotel_detail
+from food_agent import get_location
 
 
-
-get_hotel_detail("g293916-d19626625", "2025-06-19", "2025-06-20", 1)
+get_location(21.0278, 105.8342)

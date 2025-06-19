@@ -13,3 +13,4 @@ def _set_if_undefined(var: str):
 
 _set_if_undefined("GOOGLE_API_KEY")
 _set_if_undefined("TAVILY_API_KEY")
+_set_if_undefined("GOOGLE_PLACE_API")
