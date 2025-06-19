@@ -28,9 +28,8 @@ def get_hotel_detail(hotel_id, check_in, check_out, people):
 
 
 class RoomSearchAgent:
-    def __init__(self, model, verbose):
+    def __init__(self, model):
         self.model = model
-        self.verbose = verbose
 
     def generate(self):
         @tool
@@ -38,20 +37,32 @@ class RoomSearchAgent:
             """Get the price of the surrounding hotels given the location, check-in, check-out date and number of people
             checkin is the check-in date, format year-month-date (eg. 2025-07-06)
             checkout is the check-out date, format the same as checkin
-
+            return the rate for 1 night for the hotel
             """
+
+            hotel_list = get_hotel_list(location)
+        
+        @tool
+        def cost_counter(rate: float, nights: int) -> str:
+            """Get the cost hotel for the whole trip
+            input: rate (float): the cost for 1 night, nights (int): the number of nights stay at the hotel
+            output: the cost for hotel for the whole trip
+            """
+
+            return rate * nights
 
         promt = (
             "You are a research agent.\n\n"
             "INSTRUCTIONS:\n"
-            "- Assist ONLY with finding the cheapest flight from A to B during the time frame with the cheapest price tag\n"
+            "- Assist ONLY with finding the cheapest hotel during the stay\n"
+            "- ONLY return 1 hotel, including the total price and the name of hotel\n"
             "- After you're done with your tasks, respond to the supervisor directly\n"
             "- Respond ONLY with the results of your work, do NOT include ANY other text.\n"
         )
 
         room_agent = create_react_agent(
             model = self.model,
-            tools = [get_room_price],
+            tools = [get_room_price, cost_counter],
             prompt = promt,
             name = "research_agent"
         )
